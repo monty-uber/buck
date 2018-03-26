@@ -55,13 +55,13 @@ public class CGoCompileStep extends ShellStep {
   protected ImmutableList<String> getShellCommandInternal(ExecutionContext context) {
     return ImmutableList.<String>builder()
         .addAll(cgoCommandPrefix)
-        .add("-importpath", context.getBuildCellRootPath().toString())
-        .add("-srcdir", context.getBuildCellRootPath().toString())
+        .add("-importpath", this.workingDirectory.toString())
+        .add("-srcdir", this.workingDirectory.toString())
         .add("-objdir", outputDir.toString())
         .addAll(cgoCompilerFlags)
         .addAll(
             srcs.stream()
-                .map(x -> context.getBuildCellRootPath().relativize(x).toString())
+                .map(x -> this.workingDirectory.relativize(x).toString())
                 .iterator())
         .build();
   }

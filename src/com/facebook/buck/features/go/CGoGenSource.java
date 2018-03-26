@@ -116,7 +116,7 @@ public class CGoGenSource extends AbstractBuildRule {
     steps.add(
         new CGoCompileStep(
             getBuildTarget(),
-            getProjectFilesystem().getRootPath(),
+            getProjectFilesystem().getPathForRelativePath(getBuildTarget().getBasePath()),
             cgo.getEnvironment(context.getSourcePathResolver()),
             cgo.getCommandPrefix(context.getSourcePathResolver()),
             cgoCompilerFlags,
@@ -125,7 +125,7 @@ public class CGoGenSource extends AbstractBuildRule {
                 .map(context.getSourcePathResolver()::getAbsolutePath)
                 .collect(ImmutableList.toImmutableList()),
             platform,
-            genDir));
+            getProjectFilesystem().getPathForRelativePath(genDir)));
 
     buildableContext.recordArtifact(genDir);
     return steps.build();

@@ -1,7 +1,7 @@
 package main
 
 /*
-#include "src/cgo_test/lib.h"
+#include "lib.h"
 #include <stdlib.h>
 
 void wrapper(int i) {
