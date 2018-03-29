@@ -517,7 +517,8 @@ public class CxxLibraryFactory {
             args.getPrefixHeader(),
             args.getPrecompiledHeader(),
             pic,
-            sandboxTree)
+            sandboxTree,
+            Optional.empty())
         .requirePreprocessAndCompileRules(
             CxxDescriptionEnhancer.parseCxxSources(
                 buildTarget, ruleResolver, ruleFinder, sourcePathResolver, cxxPlatform, args));

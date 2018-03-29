@@ -243,7 +243,8 @@ public class CxxPythonExtensionDescription
             args.getPrefixHeader(),
             args.getPrecompiledHeader(),
             PicType.PIC,
-            sandboxTree);
+            sandboxTree,
+            Optional.empty());
     return factory.requirePreprocessAndCompileRules(srcs);
   }
 

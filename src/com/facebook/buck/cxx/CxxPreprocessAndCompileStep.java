@@ -68,6 +68,8 @@ class CxxPreprocessAndCompileStep implements Step {
 
   private final boolean useArgfile;
 
+  private final Optional<Path> workingDirectory;
+
   private static final FileLastModifiedDateContentsScrubber FILE_LAST_MODIFIED_DATE_SCRUBBER =
       new FileLastModifiedDateContentsScrubber();
 
@@ -86,7 +88,8 @@ class CxxPreprocessAndCompileStep implements Step {
       Path scratchDir,
       boolean useArgfile,
       Compiler compiler,
-      Optional<CxxLogInfo> cxxLogInfo) {
+      Optional<CxxLogInfo> cxxLogInfo,
+      Optional<Path> workingDirectory) {
     this.filesystem = filesystem;
     this.operation = operation;
     this.output = output;
@@ -100,6 +103,7 @@ class CxxPreprocessAndCompileStep implements Step {
     this.useArgfile = useArgfile;
     this.compiler = compiler;
     this.cxxLogInfo = cxxLogInfo;
+    this.workingDirectory = workingDirectory;
   }
 
   @Override
@@ -134,7 +138,8 @@ class CxxPreprocessAndCompileStep implements Step {
     }
 
     return ProcessExecutorParams.builder()
-        .setDirectory(filesystem.getRootPath().toAbsolutePath())
+        .setDirectory(
+            workingDirectory.orElse(filesystem.getRootPath().toAbsolutePath()))
         .setRedirectError(ProcessBuilder.Redirect.PIPE)
         .setEnvironment(ImmutableMap.copyOf(env));
   }

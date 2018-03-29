@@ -99,6 +99,7 @@ public class CxxCompileStepIntegrationTest {
             scratchDir,
             true,
             compiler,
+            Optional.empty(),
             Optional.empty());
 
     // Execute the archive step and verify it ran successfully.
@@ -168,6 +169,7 @@ public class CxxCompileStepIntegrationTest {
             scratchDir,
             true,
             compiler,
+            Optional.empty(),
             Optional.empty());
 
     // Execute the archive step and verify it ran successfully.

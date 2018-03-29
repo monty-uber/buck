@@ -839,7 +839,8 @@ public class CxxDescriptionEnhancer {
         args.getPlatformLinkerFlags(),
         args.getCxxRuntimeType(),
         args.getIncludeDirs(),
-        args.getRawHeaders());
+        args.getRawHeaders(),
+        Optional.empty());
   }
 
   public static CxxLinkAndCompileRules createBuildRulesForCxxBinary(
@@ -872,7 +873,8 @@ public class CxxDescriptionEnhancer {
       PatternMatchedCollection<ImmutableList<StringWithMacros>> platformLinkerFlags,
       Optional<CxxRuntimeType> cxxRuntimeType,
       ImmutableList<String> includeDirs,
-      ImmutableSortedSet<SourcePath> rawHeaders) {
+      ImmutableSortedSet<SourcePath> rawHeaders,
+      Optional<Path> workingDirectory) {
     SourcePathRuleFinder ruleFinder = new SourcePathRuleFinder(resolver);
     SourcePathResolver sourcePathResolver = DefaultSourcePathResolver.from(ruleFinder);
     //    TODO(beefon): should be:
@@ -966,7 +968,8 @@ public class CxxDescriptionEnhancer {
                 prefixHeader,
                 precompiledHeader,
                 pic,
-                sandboxTree)
+                sandboxTree,
+                workingDirectory)
             .requirePreprocessAndCompileRules(srcs);
 
     BuildTarget linkRuleTarget = createCxxLinkTarget(target, flavoredLinkerMapMode);

@@ -73,6 +73,7 @@ public class CxxPreprocessAndCompile extends AbstractBuildRule
   private final CxxSource.Type inputType;
   private final DebugPathSanitizer sanitizer;
   private final Optional<SymlinkTree> sandboxTree;
+  private final Optional<Path> workingDirectory;
 
   private CxxPreprocessAndCompile(
       BuildTarget buildTarget,
@@ -85,7 +86,8 @@ public class CxxPreprocessAndCompile extends AbstractBuildRule
       CxxSource.Type inputType,
       Optional<CxxPrecompiledHeader> precompiledHeaderRule,
       DebugPathSanitizer sanitizer,
-      Optional<SymlinkTree> sandboxTree) {
+      Optional<SymlinkTree> sandboxTree,
+      Optional<Path> workingDirectory) {
     super(buildTarget, projectFilesystem);
     this.buildDeps = buildDeps;
     this.sandboxTree = sandboxTree;
@@ -110,6 +112,7 @@ public class CxxPreprocessAndCompile extends AbstractBuildRule
         "CxxPreprocessAndCompile %s should not be created with LinkerMapMode flavor (%s)",
         this,
         LinkerMapMode.FLAVOR_DOMAIN);
+    this.workingDirectory = workingDirectory;
   }
 
   /** @return a {@link CxxPreprocessAndCompile} step that compiles the given preprocessed source. */
@@ -122,7 +125,8 @@ public class CxxPreprocessAndCompile extends AbstractBuildRule
       SourcePath input,
       CxxSource.Type inputType,
       DebugPathSanitizer sanitizer,
-      Optional<SymlinkTree> sandboxTree) {
+      Optional<SymlinkTree> sandboxTree,
+      Optional<Path> workingDirectory) {
     return new CxxPreprocessAndCompile(
         buildTarget,
         projectFilesystem,
@@ -134,7 +138,8 @@ public class CxxPreprocessAndCompile extends AbstractBuildRule
         inputType,
         Optional.empty(),
         sanitizer,
-        sandboxTree);
+        sandboxTree,
+        workingDirectory);
   }
 
   /**
@@ -151,7 +156,8 @@ public class CxxPreprocessAndCompile extends AbstractBuildRule
       CxxSource.Type inputType,
       Optional<CxxPrecompiledHeader> precompiledHeaderRule,
       DebugPathSanitizer sanitizer,
-      Optional<SymlinkTree> sandboxTree) {
+      Optional<SymlinkTree> sandboxTree,
+      Optional<Path> workingDirectory) {
     return new CxxPreprocessAndCompile(
         buildTarget,
         projectFilesystem,
@@ -163,7 +169,8 @@ public class CxxPreprocessAndCompile extends AbstractBuildRule
         inputType,
         precompiledHeaderRule,
         sanitizer,
-        sandboxTree);
+        sandboxTree,
+        workingDirectory);
   }
 
   @Override
@@ -233,7 +240,8 @@ public class CxxPreprocessAndCompile extends AbstractBuildRule
                 .setTarget(getBuildTarget())
                 .setSourcePath(relativeInputPath)
                 .setOutputPath(output)
-                .build()));
+                .build()),
+        workingDirectory);
   }
 
   public Path getRelativeInputPath(SourcePathResolver resolver) {

@@ -165,6 +165,7 @@ public class CxxPreprocessAndCompileTest {
                     DEFAULT_INPUT,
                     DEFAULT_INPUT_TYPE,
                     CxxPlatformUtils.DEFAULT_COMPILER_DEBUG_PATH_SANITIZER,
+                    Optional.empty(),
                     Optional.empty()));
 
     // Verify that changing the compiler causes a rulekey change.
@@ -187,6 +188,7 @@ public class CxxPreprocessAndCompileTest {
                     DEFAULT_INPUT,
                     DEFAULT_INPUT_TYPE,
                     CxxPlatformUtils.DEFAULT_COMPILER_DEBUG_PATH_SANITIZER,
+                    Optional.empty(),
                     Optional.empty()));
     assertNotEquals(defaultRuleKey, compilerChange);
 
@@ -217,6 +219,7 @@ public class CxxPreprocessAndCompileTest {
                     DEFAULT_INPUT_TYPE,
                     Optional.empty(),
                     CxxPlatformUtils.DEFAULT_COMPILER_DEBUG_PATH_SANITIZER,
+                    Optional.empty(),
                     Optional.empty()));
     assertNotEquals(defaultRuleKey, operationChange);
 
@@ -240,6 +243,7 @@ public class CxxPreprocessAndCompileTest {
                     DEFAULT_INPUT,
                     DEFAULT_INPUT_TYPE,
                     CxxPlatformUtils.DEFAULT_COMPILER_DEBUG_PATH_SANITIZER,
+                    Optional.empty(),
                     Optional.empty()));
     assertNotEquals(defaultRuleKey, platformFlagsChange);
 
@@ -263,6 +267,7 @@ public class CxxPreprocessAndCompileTest {
                     DEFAULT_INPUT,
                     DEFAULT_INPUT_TYPE,
                     CxxPlatformUtils.DEFAULT_COMPILER_DEBUG_PATH_SANITIZER,
+                    Optional.empty(),
                     Optional.empty()));
     assertNotEquals(defaultRuleKey, ruleFlagsChange);
 
@@ -283,6 +288,7 @@ public class CxxPreprocessAndCompileTest {
                     FakeSourcePath.of("/root/different"),
                     DEFAULT_INPUT_TYPE,
                     CxxPlatformUtils.DEFAULT_COMPILER_DEBUG_PATH_SANITIZER,
+                    Optional.empty(),
                     Optional.empty()));
     assertNotEquals(defaultRuleKey, inputChange);
   }
@@ -332,6 +338,7 @@ public class CxxPreprocessAndCompileTest {
                     DEFAULT_INPUT_TYPE,
                     Optional.empty(),
                     CxxPlatformUtils.DEFAULT_COMPILER_DEBUG_PATH_SANITIZER,
+                    Optional.empty(),
                     Optional.empty()));
       }
     }
@@ -370,6 +377,7 @@ public class CxxPreprocessAndCompileTest {
             FakeSourcePath.of(input.toString()),
             DEFAULT_INPUT_TYPE,
             CxxPlatformUtils.DEFAULT_COMPILER_DEBUG_PATH_SANITIZER,
+            Optional.empty(),
             Optional.empty());
 
     ImmutableList<String> expectedCompileCommand =
@@ -430,6 +438,7 @@ public class CxxPreprocessAndCompileTest {
             DEFAULT_INPUT_TYPE,
             Optional.empty(),
             CxxPlatformUtils.DEFAULT_COMPILER_DEBUG_PATH_SANITIZER,
+            Optional.empty(),
             Optional.empty());
     assertThat(
         cxxPreprocess.getInputsAfterBuildingLocally(context, cellPathResolver),
@@ -448,6 +457,7 @@ public class CxxPreprocessAndCompileTest {
             fakeInput,
             DEFAULT_INPUT_TYPE,
             CxxPlatformUtils.DEFAULT_COMPILER_DEBUG_PATH_SANITIZER,
+            Optional.empty(),
             Optional.empty());
     assertThat(
         cxxCompile.getInputsAfterBuildingLocally(context, cellPathResolver), hasItem(compiler));
@@ -478,6 +488,7 @@ public class CxxPreprocessAndCompileTest {
             FakeSourcePath.of(input.toString()),
             DEFAULT_INPUT_TYPE,
             CxxPlatformUtils.DEFAULT_COMPILER_DEBUG_PATH_SANITIZER,
+            Optional.empty(),
             Optional.empty());
 
     ImmutableList<String> command =
@@ -525,6 +536,7 @@ public class CxxPreprocessAndCompileTest {
             DEFAULT_INPUT_TYPE,
             Optional.empty(),
             CxxPlatformUtils.DEFAULT_COMPILER_DEBUG_PATH_SANITIZER,
+            Optional.empty(),
             Optional.empty());
 
     ImmutableList<String> command =

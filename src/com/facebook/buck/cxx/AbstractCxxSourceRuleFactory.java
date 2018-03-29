@@ -130,6 +130,9 @@ abstract class AbstractCxxSourceRuleFactory {
   @Value.Parameter
   protected abstract Optional<SymlinkTree> getSandboxTree();
 
+  @Value.Parameter
+  protected abstract Optional<Path> getWorkingDirectory();
+
   @Value.Check
   protected void checkPrefixAndPrecompiledHeaderArgs() {
     if (getPrefixHeader().isPresent() && getPrecompiledHeader().isPresent()) {
@@ -404,7 +407,8 @@ abstract class AbstractCxxSourceRuleFactory {
         source.getPath(),
         source.getType(),
         getSanitizerForSourceType(source.getType()),
-        getSandboxTree());
+        getSandboxTree(),
+        getWorkingDirectory());
   }
 
   @VisibleForTesting
@@ -555,7 +559,8 @@ abstract class AbstractCxxSourceRuleFactory {
         source.getType(),
         precompiledHeaderRule,
         getSanitizerForSourceType(source.getType()),
-        getSandboxTree());
+        getSandboxTree(),
+        getWorkingDirectory());
   }
 
   Optional<CxxPrecompiledHeader> getOptionalPrecompiledHeader(

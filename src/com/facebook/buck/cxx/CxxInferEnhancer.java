@@ -403,7 +403,8 @@ public final class CxxInferEnhancer {
             args.getPrefixHeader(),
             args.getPrecompiledHeader(),
             PicType.PDC,
-            sandboxTree);
+            sandboxTree,
+            Optional.empty());
     return factory.requireInferCaptureBuildRules(sources, inferBuckConfig);
   }
 }

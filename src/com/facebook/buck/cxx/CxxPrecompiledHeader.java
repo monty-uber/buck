@@ -318,6 +318,7 @@ class CxxPrecompiledHeader extends AbstractBuildRule
         scratchDir,
         /* useArgFile*/ true,
         compilerDelegate.getCompiler(),
+        Optional.empty(),
         Optional.empty());
   }
 }

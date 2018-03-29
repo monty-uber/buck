@@ -203,7 +203,8 @@ public class CxxLuaExtensionDescription
                 args.getPrefixHeader(),
                 args.getPrecompiledHeader(),
                 PicType.PIC,
-                sandboxTree)
+                sandboxTree,
+                Optional.empty())
             .requirePreprocessAndCompileRules(srcs);
 
     ImmutableList.Builder<Arg> argsBuilder = ImmutableList.builder();
