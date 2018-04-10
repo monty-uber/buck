@@ -66,8 +66,7 @@ public class CGoGenSource extends AbstractBuildRule {
     this.cgo = cgo;
     this.cgoCompilerFlags = cgoCompilerFlags;
     this.platform = platform;
-    this.genDir = projectFilesystem.getPathForRelativePath(
-        BuildTargets.getGenPath(projectFilesystem, buildTarget, "%s/gen/"));
+    this.genDir = BuildTargets.getGenPath(projectFilesystem, buildTarget, "%s/gen/");
 
     ImmutableList.Builder<SourcePath> cBuilder = ImmutableList.builder();
     ImmutableList.Builder<SourcePath> cgoBuilder = ImmutableList.builder();

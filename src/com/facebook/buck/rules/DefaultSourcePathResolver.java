@@ -65,15 +65,8 @@ public class DefaultSourcePathResolver extends AbstractSourcePathResolver {
         return getSourcePathName(target, castPath.getDelegate());
       } else if (sourcePath instanceof ExplicitBuildTargetSourcePath) {
         Path path = ((ExplicitBuildTargetSourcePath) sourcePath).getResolvedPath();
-        // path is a relative path in gendir
         if (path.startsWith(rule.getProjectFilesystem().getBuckPaths().getGenDir())) {
           path = rule.getProjectFilesystem().getBuckPaths().getGenDir().relativize(path);
-        }
-        // path is an absolute path in gendir
-        else if (path.startsWith(rule.getProjectFilesystem().getPathForRelativePath(
-            rule.getProjectFilesystem().getBuckPaths().getGenDir()))) {
-          path = rule.getProjectFilesystem().getPathForRelativePath(
-              rule.getProjectFilesystem().getBuckPaths().getGenDir()).relativize(path);
         }
         if (path.startsWith(rule.getBuildTarget().getBasePath())) {
           return rule.getBuildTarget().getBasePath().relativize(path).toString();
