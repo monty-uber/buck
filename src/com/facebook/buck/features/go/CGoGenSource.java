@@ -72,6 +72,8 @@ public class CGoGenSource extends AbstractBuildRule {
     ImmutableList.Builder<SourcePath> cgoBuilder = ImmutableList.builder();
     ImmutableList.Builder<SourcePath> goBuilder = ImmutableList.builder();
 
+    Path absoluteGenPath = projectFilesystem.getPathForRelativePath(genDir);
+
     for (SourcePath srcPath : cgoSrcs) {
       String path =
           projectFilesystem
@@ -82,15 +84,15 @@ public class CGoGenSource extends AbstractBuildRule {
 
       // cgo generates 2 files for each Go sources, 1 .cgo1.go and 1 .cgo2.c
       goBuilder.add(
-          ExplicitBuildTargetSourcePath.of(buildTarget, genDir.resolve(filename + ".cgo1.go")));
+          ExplicitBuildTargetSourcePath.of(buildTarget, absoluteGenPath.resolve(filename + ".cgo1.go")));
       cBuilder.add(
-          ExplicitBuildTargetSourcePath.of(buildTarget, genDir.resolve(filename + ".cgo2.c")));
+          ExplicitBuildTargetSourcePath.of(buildTarget, absoluteGenPath.resolve(filename + ".cgo2.c")));
     }
 
-    cBuilder.add(ExplicitBuildTargetSourcePath.of(buildTarget, genDir.resolve("_cgo_export.c")));
-    cgoBuilder.add(ExplicitBuildTargetSourcePath.of(buildTarget, genDir.resolve("_cgo_main.c")));
+    cBuilder.add(ExplicitBuildTargetSourcePath.of(buildTarget, absoluteGenPath.resolve("_cgo_export.c")));
+    cgoBuilder.add(ExplicitBuildTargetSourcePath.of(buildTarget, absoluteGenPath.resolve("_cgo_main.c")));
 
-    goBuilder.add(ExplicitBuildTargetSourcePath.of(buildTarget, genDir.resolve("_cgo_gotypes.go")));
+    goBuilder.add(ExplicitBuildTargetSourcePath.of(buildTarget, absoluteGenPath.resolve("_cgo_gotypes.go")));
 
     this.cFiles = cBuilder.build();
     this.cgoFiles = cgoBuilder.build();
