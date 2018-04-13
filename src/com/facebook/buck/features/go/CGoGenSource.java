@@ -48,6 +48,7 @@ public class CGoGenSource extends AbstractBuildRule {
 
   private final ImmutableSortedSet<BuildRule> buildDeps;
   private final Path genDir;
+  private final Path absoluteGenPath;
   private final ImmutableList<SourcePath> cFiles;
   private final ImmutableList<SourcePath> cgoFiles;
   private final ImmutableList<SourcePath> goFiles;
@@ -72,7 +73,7 @@ public class CGoGenSource extends AbstractBuildRule {
     ImmutableList.Builder<SourcePath> cgoBuilder = ImmutableList.builder();
     ImmutableList.Builder<SourcePath> goBuilder = ImmutableList.builder();
 
-    Path absoluteGenPath = projectFilesystem.getPathForRelativePath(genDir);
+    absoluteGenPath = projectFilesystem.getPathForRelativePath(genDir);
 
     for (SourcePath srcPath : cgoSrcs) {
       String path =
@@ -142,19 +143,30 @@ public class CGoGenSource extends AbstractBuildRule {
     return ExplicitBuildTargetSourcePath.of(getBuildTarget(), genDir);
   }
 
-  public ImmutableList<SourcePath> getCFiles() {
-    return cFiles;
+  public ImmutableList<SourcePath> getCFilesRelativeToWorkingDirectory(Path workingDirectory) {
+    return getFilesRelativeToPath(workingDirectory, cFiles);
   }
 
-  public ImmutableList<SourcePath> getCgoFiles() {
-    return cgoFiles;
+  public ImmutableList<SourcePath> getCgoFilesRelativeToWorkingDirectory(Path workingDirectory) {
+    return getFilesRelativeToPath(workingDirectory, cgoFiles);
   }
 
-  public ImmutableList<SourcePath> getGoFiles() {
-    return goFiles;
+  public ImmutableList<SourcePath> getGoFilesRelativeToWorkingDirectory(Path workingDirectory) {
+    return getFilesRelativeToPath(workingDirectory, goFiles);
   }
 
-  public SourcePath getExportHeader() {
-    return ExplicitBuildTargetSourcePath.of(getBuildTarget(), genDir.resolve("_cgo_export.h"));
+  public SourcePath getExportHeaderRelativeToWorkingDirectory(Path workingDirectory) {
+    return ExplicitBuildTargetSourcePath.of(getBuildTarget(),
+        workingDirectory.relativize(absoluteGenPath.resolve("_cgo_export.h")));
+  }
+
+  private ImmutableList<SourcePath> getFilesRelativeToPath(Path path, ImmutableList<SourcePath> files) {
+    ImmutableList.Builder<SourcePath> builder = ImmutableList.builder();
+    for (SourcePath file : files) {
+      BuildTarget target = ((ExplicitBuildTargetSourcePath)file).getTarget();
+      Path relativePath = path.relativize(((ExplicitBuildTargetSourcePath)file).getResolvedPath());
+      builder.add(ExplicitBuildTargetSourcePath.of(target, relativePath));
+    }
+    return builder.build();
   }
 }

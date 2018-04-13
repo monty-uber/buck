@@ -65,15 +65,18 @@ public class DefaultSourcePathResolver extends AbstractSourcePathResolver {
         return getSourcePathName(target, castPath.getDelegate());
       } else if (sourcePath instanceof ExplicitBuildTargetSourcePath) {
         Path path = ((ExplicitBuildTargetSourcePath) sourcePath).getResolvedPath();
-        // path is a relative path in gendir
+        // path is under gendir as a relative path to buck project root
         if (path.startsWith(rule.getProjectFilesystem().getBuckPaths().getGenDir())) {
           path = rule.getProjectFilesystem().getBuckPaths().getGenDir().relativize(path);
         }
-        // path is an absolute path in gendir
-        else if (path.startsWith(rule.getProjectFilesystem().getPathForRelativePath(
-            rule.getProjectFilesystem().getBuckPaths().getGenDir()))) {
-          path = rule.getProjectFilesystem().getPathForRelativePath(
-              rule.getProjectFilesystem().getBuckPaths().getGenDir()).relativize(path);
+        // path is under gendir as a relative path to the build target base path
+        Path absoluteTargetBasePath = rule.getProjectFilesystem().getPathForRelativePath(
+            rule.getBuildTarget().getBasePath());
+        Path sourcePathOnTargetBasePath = absoluteTargetBasePath.resolve(path).normalize();
+        Path absoluteGenDirPath = rule.getProjectFilesystem().getPathForRelativePath(
+            rule.getProjectFilesystem().getBuckPaths().getGenDir());
+        if (sourcePathOnTargetBasePath.startsWith(absoluteGenDirPath)) {
+          path = absoluteGenDirPath.relativize(sourcePathOnTargetBasePath);
         }
         if (path.startsWith(rule.getBuildTarget().getBasePath())) {
           return rule.getBuildTarget().getBasePath().relativize(path).toString();

@@ -136,14 +136,17 @@ public class CGoLibrary extends NoopBuildRule {
                     cxxBuckConfig,
                     platform.getCxxPlatform(),
                     args,
-                    ImmutableSortedSet.of(genSource),
+                    ImmutableSortedSet.<BuildRule>naturalOrder().build(),
                     ImmutableSortedSet.<SourcePath>naturalOrder()
-                        .add(genSource.getExportHeader())
+                        .add(genSource.getExportHeaderRelativeToWorkingDirectory(
+                            projectFilesystem.getPathForRelativePath(target.getBasePath())))
                         .addAll(headers.values())
                         .build(),
                     new ImmutableList.Builder<SourcePath>()
-                        .addAll(genSource.getCFiles())
-                        .addAll(genSource.getCgoFiles())
+                        .addAll(genSource.getCFilesRelativeToWorkingDirectory(
+                            projectFilesystem.getPathForRelativePath(target.getBasePath())))
+                        .addAll(genSource.getCgoFilesRelativeToWorkingDirectory(
+                            projectFilesystem.getPathForRelativePath(target.getBasePath())))
                         .build(),
                     cgoDeps,
                     args.getLinkerFlags()));
@@ -185,10 +188,12 @@ public class CGoLibrary extends NoopBuildRule {
                     args,
                     ImmutableSortedSet.of(cgoImport),
                     ImmutableSortedSet.<SourcePath>naturalOrder()
-                        .add(genSource.getExportHeader())
+                        .add(genSource.getExportHeaderRelativeToWorkingDirectory(
+                            projectFilesystem.getPathForRelativePath(target.getBasePath())))
                         .addAll(headers.values())
                         .build(),
-                    genSource.getCFiles(),
+                    genSource.getCFilesRelativeToWorkingDirectory(
+                        projectFilesystem.getPathForRelativePath(target.getBasePath())),
                     cgoDeps,
                     ImmutableList.<StringWithMacros>builder()
                         .addAll(args.getLinkerFlags())
@@ -209,7 +214,8 @@ public class CGoLibrary extends NoopBuildRule {
                 target,
                 projectFilesystem,
                 new ImmutableList.Builder<SourcePath>()
-                    .addAll(genSource.getGoFiles())
+                    .addAll(genSource.getGoFilesRelativeToWorkingDirectory(
+                        projectFilesystem.getPathForRelativePath(target.getBasePath())))
                     .add(Preconditions.checkNotNull(cgoImport.getSourcePathToOutput()))
                     .build(),
                 Preconditions.checkNotNull(cgoAllBin.getSourcePathToOutput())));
